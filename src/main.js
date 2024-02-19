@@ -402,7 +402,6 @@ async function check_polling_rate(first_run) {
             });
         }
         polling_rate = await get_polling_rate(dongle);
-        console.log("Running, Polling Rate, Target Rate, Higher Rate: " + running + " " + polling_rate + " " + target_rate + " " + higher_rate);
         if (first_run) {
             tray.setImage(nativeImage.createFromPath(path.join(app_path, assets_folder + polling_rate + (polling_rate == higher_rate ? 'a.png' : '.png'))));
             tray.setToolTip(polling_rate + 'hz');
