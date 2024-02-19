@@ -375,10 +375,9 @@ async function check_polling_rate(first_run) {
 
         fs.closeSync(fs.openSync(path.join(app.getPath('userData'), 'cfg/processlist.cfg'), 'a'));
 
-        var array = fs.readFileSync(path.join(app.getPath('userData'), 'cfg/processlist.cfg')).toString().split('\r\n');
-
+        var processarray = fs.readFileSync(path.join(app.getPath('userData'), 'cfg/processlist.cfg')).toString().split('\r\n');
+        const array = processarray.map(n => n.split(" ").shift());
         const running = is_running(array);
-
         const dongle = await get_dongle();
         current_model = dongles[dongle.productId];
         if (current_model === undefined)
@@ -392,10 +391,17 @@ async function check_polling_rate(first_run) {
             await dongle.selectConfiguration(1);
 
         await dongle.claimInterface(dongle.configuration.interfaces[0].interfaceNumber);
-
-        const target_rate = running ? higher_rate : lower_rate;
+        let target_rate = running ? higher_rate : lower_rate;
+        if(running){
+            processarray.forEach(function(entry){
+                let inputToken = entry.split(" ");
+                if(inputToken.length > 1)
+                {
+                   target_rate = Number(inputToken[1]);
+                }
+            });
+        }
         polling_rate = await get_polling_rate(dongle);
-
         if (first_run) {
             tray.setImage(nativeImage.createFromPath(path.join(app_path, assets_folder + polling_rate + (polling_rate == higher_rate ? 'a.png' : '.png'))));
             tray.setToolTip(polling_rate + 'hz');
