@@ -361,10 +361,10 @@ async function set_polling_rate(dongle, polling_rate) {
         throw error;
     }
 };
-
+let runningApp = "";
 function is_running(names) {
     stdout = execSync('tasklist /fo csv /nh').toString();
-    ret = names.some(term => stdout.toLowerCase().includes('"' + term.toLowerCase() + '"'));
+    ret = names.some(term => stdout.toLowerCase().includes('"' + term.toLowerCase() + '"')? runningApp = term : runningApp = "");   
     return ret;
 };
 
@@ -395,13 +395,14 @@ async function check_polling_rate(first_run) {
         if(running){
             processarray.forEach(function(entry){
                 let inputToken = entry.split(" ");
-                if(inputToken.length > 1)
+                if(inputToken.length > 1 && runningApp===inputToken[0])
                 {
                    target_rate = Number(inputToken[1]);
                 }
             });
         }
         polling_rate = await get_polling_rate(dongle);
+        console.log("Running, Polling Rate, Target Rate, Higher Rate: " + running + " " + polling_rate + " " + target_rate + " " + higher_rate);
         if (first_run) {
             tray.setImage(nativeImage.createFromPath(path.join(app_path, assets_folder + polling_rate + (polling_rate == higher_rate ? 'a.png' : '.png'))));
             tray.setToolTip(polling_rate + 'hz');
