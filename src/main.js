@@ -61,13 +61,10 @@ let lower_rate = 500;
 let higher_rate = 4000;
 
 function handle_context_menu() {
-    context_menu.items[0].submenu.items.forEach(function (item) {
+context_menu.items[0].submenu.items.forEach(function (item) {
         item.enabled = parseInt(item.label) < higher_rate;
     });
 
-    context_menu.items[1].submenu.items.forEach(function (item) {
-        item.enabled = parseInt(item.label) > lower_rate;
-    });
 };
 
 app.whenReady().then(() => {
@@ -101,21 +98,6 @@ app.whenReady().then(() => {
                 { label: '250hz', type: 'radio', click: handle_inactive, checked: lower_rate == 250 },
                 { label: '500hz', type: 'radio', click: handle_inactive, checked: lower_rate == 500 },
                 { label: '1000hz', type: 'radio', click: handle_inactive, checked: lower_rate == 1000 },
-                { label: '2000hz', type: 'radio', click: handle_inactive, checked: lower_rate == 2000 },
-                { label: '4000hz', type: 'radio', click: handle_inactive, checked: lower_rate == 4000 },
-                { label: '8000hz', type: 'radio', click: handle_inactive, checked: lower_rate == 8000, visible: lower_rate == 8000 },
-            ]
-        },
-        {
-            label: 'Active polling rate', type: 'submenu',
-            submenu: [
-                { label: '125hz', type: 'radio', click: handle_active, checked: higher_rate == 125 },
-                { label: '250hz', type: 'radio', click: handle_active, checked: higher_rate == 250 },
-                { label: '500hz', type: 'radio', click: handle_active, checked: higher_rate == 500 },
-                { label: '1000hz', type: 'radio', click: handle_active, checked: higher_rate == 1000 },
-                { label: '2000hz', type: 'radio', click: handle_active, checked: higher_rate == 2000 },
-                { label: '4000hz', type: 'radio', click: handle_active, checked: higher_rate == 4000 },
-                { label: '8000hz', type: 'radio', click: handle_active, checked: higher_rate == 8000, visible: higher_rate == 8000 },
             ]
         },
         { label: 'Open process list', type: 'normal', click: open_process_list },
@@ -384,7 +366,6 @@ async function check_polling_rate(first_run) {
             throw new Error('No compatible Razer Dongle found');
 
         context_menu.items[0].submenu.items[context_menu.items[0].submenu.items.length - 1].visible = is_8k_compatible();
-        context_menu.items[1].submenu.items[context_menu.items[1].submenu.items.length - 1].visible = is_8k_compatible();
 
         await dongle.open();
         if (dongle.configuration === null)
