@@ -379,6 +379,7 @@ async function check_polling_rate(first_run) {
             {
                 let inputToken = processarray[arrayContainsApps].split(" ");
                 target_rate = Number(inputToken[1]);
+                higher_rate = target_rate;
             }
         }
         else
