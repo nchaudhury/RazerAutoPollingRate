@@ -18,10 +18,15 @@ Any polling rate changes in Razer Synapse will be overwritten but will **not** d
 
 application.exe space polling-rate
 
+
 Discovery.exe 2000
+
 FPSAimTrainer-Win64-Shipping.exe 2000
+
 DOOMEternalx64vk.exe 8000
+
 LatMon.exe 8000
+
 FortniteClient-Win64-Shipping.exe 2000
 
 ## Additional Information
