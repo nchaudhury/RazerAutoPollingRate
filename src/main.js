@@ -391,16 +391,17 @@ async function check_polling_rate(first_run) {
             await dongle.selectConfiguration(1);
 
         await dongle.claimInterface(dongle.configuration.interfaces[0].interfaceNumber);
-        let target_rate = running ? higher_rate : lower_rate;
+        let target_rate;
         if(running){
-            processarray.forEach(function(entry){
-                let inputToken = entry.split(" ");
-                if(inputToken.length > 1 && runningApp===inputToken[0])
-                {
-                   target_rate = Number(inputToken[1]);
-                }
-            });
+            var arrayContainsApps = array.indexOf(runningApp);
+            if(arrayContainsApps > -1 )
+            {
+                let inputToken = processarray[arrayContainsApps].split(" ");
+                target_rate = Number(inputToken[1]);
+            }
         }
+        else
+            target_rate = lower_rate;
         polling_rate = await get_polling_rate(dongle);
         if (first_run) {
             tray.setImage(nativeImage.createFromPath(path.join(app_path, assets_folder + polling_rate + (polling_rate == higher_rate ? 'a.png' : '.png'))));
